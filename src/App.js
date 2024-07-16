@@ -2,17 +2,18 @@ import "./App.css";
 import Header from "./components/Header";
 import AddForm from "./components/AddForm";
 import Item from "./components/Item";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 function App() {
-  const [tasks, setTasks] = useState([
-    { id: 1, title: "งานแรกของฉัน" },
-    { id: 2, title: "คู่มือการใช้โปรแกรม" },
-    { id: 3, title: "ไปเที่ยว" },
-  ]);
-
+  const [tasks, setTasks] = useState(
+    JSON.parse(localStorage.getItem("db_tasks")) || []
+  );
   const [title, setTitle] = useState("");
   const [editId, setEditId] = useState(null);
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    localStorage.setItem("db_tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   function saveTask(e) {
     e.preventDefault();
@@ -53,8 +54,8 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <Header />
+    <div className={"App "+theme}>
+      <Header theme={theme} setTheme={setTheme} />
       <div className="container">
         <AddForm
           title={title}
